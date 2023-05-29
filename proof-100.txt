@@ -1,0 +1,61 @@
+--- 0 seconds
+
+
+### Cleaning old files ###
+rm -f objects/MagicalContainer.o *.o test* demo*
+rm -f StudentTest*.cpp
+
+
+### Check 1: our demo program should compile with your class
+! timeout 20 make -j8 -f Makefile demo
+clang++-14 -std=c++2a -Werror -Wsign-conversion -Isources --compile Demo.cpp -o Demo.o
+clang++-14 -std=c++2a -Werror -Wsign-conversion -Isources --compile sources/MagicalContainer.cpp -o objects/MagicalContainer.o
+clang++-14 -std=c++2a -Werror -Wsign-conversion -Isources Demo.o objects/MagicalContainer.o -o demo
+--- 0 seconds
+### Score 1: 100
+
+
+### Check 2: our demo program should run without errors
+! timeout 20 ./demo
+Size of container: 5
+Elements in ascending order:
+2 3 9 17 25 
+Elements in cross order:
+2 25 3 17 9 
+Prime numbers:
+2 3 17 
+Size of container after removing an element: 4
+--- 0 seconds
+### Score 2: 100
+
+
+### Check 3: your test should compile 
+! timeout 20 make -j8 -f Makefile test
+clang++-14 -std=c++2a -Werror -Wsign-conversion -Isources --compile TestCounter.cpp -o TestCounter.o
+clang++-14 -std=c++2a -Werror -Wsign-conversion -Isources --compile Test.cpp -o Test.o
+clang++-14 -std=c++2a -Werror -Wsign-conversion -Isources TestCounter.o Test.o objects/MagicalContainer.o -o test
+--- 2 seconds
+### Score 3: 100
+
+
+### Check 4: you should write some new tests
+! timeout 20 ./test
+[doctest] doctest version is "2.4.11"
+[doctest] run with "--help" for options
+===============================================================================
+Test.cpp:56:
+TEST CASE:  Check AscendingIterator
+
+Test.cpp:74: ERROR: CHECK_THROWS( ++it ) did NOT throw at all!
+
+===============================================================================
+Test.cpp:78:
+TEST CASE:  Check SideCrossIterator
+
+Test.cpp:96: ERROR: CHECK_THROWS( ++it ) did NOT throw at all!
+
+--- 2 seconds
+### Score 4: 100
+
+
+Grade: 100
